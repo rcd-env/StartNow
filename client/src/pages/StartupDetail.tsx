@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Wallet, CreditCard, DollarSign, Users, Calendar, MapPin, TrendingUp, Globe, Mail, Phone, BarChart3, PieChart } from 'lucide-react';
+import { ArrowLeft, Wallet, CreditCard, DollarSign, Users, Calendar, MapPin, TrendingUp, Globe, BarChart3, PieChart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from 'recharts';
 import { useStartup } from '../contexts/StartupContext';
 

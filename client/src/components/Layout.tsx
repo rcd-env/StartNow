@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home,
@@ -21,11 +21,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [authModalType, setAuthModalType] = useState<'login' | 'signup'>('login');
   const { isLoggedIn, logout } = useAuth();
 
-  const navigation = [
+  const navigation = useMemo(() => [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Explore', href: '/explore', icon: Compass },
     { name: 'Submit Pitch', href: '/idea-input', icon: FileText },
-  ];
+  ], []);
 
   const isHomePage = location.pathname === '/';
 
@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Small delay to ensure DOM is updated
     const timer = setTimeout(updateUnderlinePosition, 50);
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, navigation]);
 
   return (
     <div className="min-h-screen">
@@ -64,7 +64,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="bg-gray-900/95 backdrop-blur-md rounded-3xl border border-gray-700/50 px-8 py-4 shadow-2xl shadow-black/20">
               <div className="flex justify-between items-center">
                 {/* Logo */}
-                <Link to="/" className="flex-shrink-0 group">
+                <Link to="/" className="flex-shrink-0 group flex items-center space-x-3">
+                  <img
+                    src="/ChatGPT Image Jul 6, 2025, 02_47_45 AM.png"
+                    alt="StartNow Logo"
+                    className="w-10 h-10 rounded-full bg-white/10 p-1 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+                  />
                   <h1 className="text-2xl font-display font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent hover:from-yellow-200 hover:via-yellow-100 hover:to-white transition-all duration-300">
                     StartNow
                   </h1>

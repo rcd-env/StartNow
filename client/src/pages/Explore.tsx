@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Eye, TrendingUp, Users, DollarSign, Calendar, MapPin, Tag, ArrowRight } from 'lucide-react';
+import { Search, Filter, Eye, TrendingUp, Users, DollarSign, MapPin, ArrowRight } from 'lucide-react';
 import { useStartup } from '../contexts/StartupContext';
 
 interface StartupProject {

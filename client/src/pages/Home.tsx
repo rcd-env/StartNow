@@ -4,14 +4,9 @@ import {
   ArrowRight,
   Rocket,
   Users,
-  TrendingUp,
-  Wallet,
-  Search,
   Upload,
   Star,
   ExternalLink,
-  Twitter,
-  Github,
   MessageCircle
 } from 'lucide-react';
 import { AuroraHero } from '@/components/ui/futuristic-hero-section';
@@ -112,7 +107,10 @@ const Home: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-400 text-sm">12 days left</span>
-                <button className="transition-colors inline-flex items-center font-medium" style={{color: '#ffee99'}} onMouseEnter={(e) => e.target.style.opacity = '0.8'} onMouseLeave={(e) => e.target.style.opacity = '1'}>
+                <button
+                  className="transition-colors inline-flex items-center font-medium hover:opacity-80"
+                  style={{color: '#ffee99'}}
+                >
                   View Details <ExternalLink className="w-4 h-4 ml-1" />
                 </button>
               </div>
@@ -181,7 +179,7 @@ const Home: React.FC = () => {
 
           <div className="text-center mt-12">
             <Link
-              to="/market-analysis"
+              to="/explore"
               className="text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 inline-flex items-center shadow-lg hover:opacity-80"
               style={{background: '#ffee99'}}
             >
@@ -204,10 +202,10 @@ const Home: React.FC = () => {
               </p>
               <div className="flex space-x-4">
                 <a href="#" className="w-10 h-10 rounded-lg flex items-center justify-center text-black hover:opacity-80 transition-all shadow-md" style={{background: '#ffee99'}}>
-                  <Twitter className="w-5 h-5" />
+                  <span className="text-sm font-bold">𝕏</span>
                 </a>
                 <a href="#" className="w-10 h-10 rounded-lg flex items-center justify-center text-black hover:opacity-80 transition-all shadow-md" style={{background: '#ffee99'}}>
-                  <Github className="w-5 h-5" />
+                  <span className="text-sm font-bold">GH</span>
                 </a>
                 <a href="#" className="w-10 h-10 rounded-lg flex items-center justify-center text-black hover:opacity-80 transition-all shadow-md" style={{background: '#ffee99'}}>
                   <MessageCircle className="w-5 h-5" />
@@ -218,7 +216,7 @@ const Home: React.FC = () => {
             <div>
               <h4 className="text-white font-semibold mb-4">Platform</h4>
               <ul className="space-y-2">
-                <li><Link to="/market-analysis" className="text-gray-300 hover:opacity-80 transition-colors" style={{color: '#ffee99'}}>Explore Projects</Link></li>
+                <li><Link to="/explore" className="text-gray-300 hover:opacity-80 transition-colors" style={{color: '#ffee99'}}>Explore Projects</Link></li>
                 <li><Link to="/idea-input" className="text-gray-300 hover:opacity-80 transition-colors" style={{color: '#ffee99'}}>Submit Pitch</Link></li>
                 <li><Link to="/financial-projections" className="text-gray-300 hover:opacity-80 transition-colors" style={{color: '#ffee99'}}>For Investors</Link></li>
                 <li><a href="#" className="text-gray-300 hover:opacity-80 transition-colors" style={{color: '#ffee99'}}>Documentation</a></li>
