@@ -25,9 +25,65 @@ const userSchema = new mongoose.Schema(
       type: String,
       sparse: true, // Allows multiple null values but unique non-null values
     },
+    role: {
+      type: String,
+      enum: ["founder", "investor", "community"],
+      default: "founder",
+    },
+    avatar: {
+      type: String,
+    },
+    bio: {
+      type: String,
+      maxlength: 500,
+    },
+    location: {
+      type: String,
+    },
+    website: {
+      type: String,
+    },
+    linkedin: {
+      type: String,
+    },
+    twitter: {
+      type: String,
+    },
+    investmentPreferences: {
+      industries: [
+        {
+          type: String,
+        },
+      ],
+      stages: [
+        {
+          type: String,
+          enum: [
+            "Pre-Seed",
+            "Seed",
+            "Series A",
+            "Series B",
+            "Series C",
+            "Growth",
+            "IPO",
+          ],
+        },
+      ],
+      minInvestment: {
+        type: Number,
+        default: 0,
+      },
+      maxInvestment: {
+        type: Number,
+      },
+    },
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }

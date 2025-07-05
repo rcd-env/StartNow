@@ -1,7 +1,9 @@
 import "dotenv/config";
 import app from "./app.js";
 import { connectDB } from "./db/connectDB.js";
-import authRouter from "./routes/auth.route.simple.js";
+import authRouter from "./routes/auth.route.js";
+import startupRouter from "./routes/startup.route.js";
+import investmentRouter from "./routes/investment.route.js";
 
 const PORT = process.env.PORT || 8080;
 
@@ -26,6 +28,8 @@ app.get("/", (req, res) => {
 
 // API Routes
 app.use("/auth", authRouter);
+app.use("/api/startups", startupRouter);
+app.use("/api/investments", investmentRouter);
 
 // Health check for API
 app.get("/api/health", (req, res) => {
