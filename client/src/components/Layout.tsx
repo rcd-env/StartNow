@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [authModalType, setAuthModalType] = useState<"login" | "signup">(
     "login"
   );
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
 
   const navigation = useMemo(
     () => [
@@ -146,12 +146,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </button>
                   </>
                 ) : (
-                  <button
-                    onClick={logout}
-                    className="text-gray-300 hover:text-red-400 hover:bg-red-900/20 px-5 py-2.5 rounded-2xl text-sm font-medium font-display transition-all duration-300 hover:scale-105 border border-gray-600/50 hover:border-red-500/50"
-                  >
-                    Log Out
-                  </button>
+                  <>
+                    <span className="text-gray-300 text-sm font-medium font-display mr-4">
+                      Welcome, {user?.name || "User"}!
+                    </span>
+                    <button
+                      onClick={logout}
+                      className="text-gray-300 hover:text-red-400 hover:bg-red-900/20 px-5 py-2.5 rounded-2xl text-sm font-medium font-display transition-all duration-300 hover:scale-105 border border-gray-600/50 hover:border-red-500/50"
+                    >
+                      Log Out
+                    </button>
+                  </>
                 )}
                 <SimpleWalletConnection variant="navbar" />
               </div>

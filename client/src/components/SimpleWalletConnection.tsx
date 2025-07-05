@@ -142,6 +142,38 @@ const SimpleWalletConnection: React.FC<WalletConnectionProps> = ({
   };
 
   if (connected && address) {
+    // For navbar variant, show address with dropdown
+    if (variant === "navbar") {
+      return (
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setShowAccountDropdown(!showAccountDropdown)}
+            className={`inline-flex items-center ${getConnectedButtonStyle()}`}
+            style={getConnectedButtonBackground()}
+          >
+            {formatAddress(address)}
+            <ChevronDown className="w-4 h-4 ml-2" />
+          </button>
+
+          {showAccountDropdown && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
+              <div className="p-3 border-b">
+                <p className="text-sm text-gray-500">Connected Account</p>
+                <p className="text-sm font-mono">{formatAddress(address)}</p>
+              </div>
+              <button
+                onClick={disconnectWallet}
+                className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              >
+                Disconnect
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // For other variants (hero, mobile), show "Connected" with dropdown
     return (
       <div className="relative" ref={dropdownRef}>
         <button
@@ -149,8 +181,8 @@ const SimpleWalletConnection: React.FC<WalletConnectionProps> = ({
           className={`inline-flex items-center ${getConnectedButtonStyle()}`}
           style={getConnectedButtonBackground()}
         >
-          {variant !== "navbar" && <Wallet className="w-4 h-4 mr-2" />}
-          {formatAddress(address)}
+          <Wallet className="w-4 h-4 mr-2" />
+          Connected
           <ChevronDown className="w-4 h-4 ml-2" />
         </button>
 

@@ -62,8 +62,8 @@ const GoldenStars = () => {
 
 export const AuroraHero = () => {
   return (
-    <motion.section className="relative grid h-screen place-content-center overflow-hidden bg-gray-950 px-4 py-24 text-gray-200">
-      <div className="relative z-10 flex flex-col items-center">
+    <motion.section className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gray-950 px-4 py-24 text-gray-200">
+      <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl mx-auto text-center">
         <span className="mb-1.5 inline-block rounded-full bg-gray-600/50 px-3 py-1.5 text-sm text-white shadow-lg shadow-blue-500/50 border border-blue-400/30 animate-pulse">
           <span className="relative">
             Available Now
@@ -79,7 +79,7 @@ export const AuroraHero = () => {
           generation of groundbreaking companies.
         </p>
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link
             to="/explore"
             className="text-black font-semibold py-4 px-8 rounded-xl transition-all duration-300 inline-flex items-center shadow-lg hover:opacity-80"
@@ -100,46 +100,6 @@ export const AuroraHero = () => {
           </Link>
 
           <SimpleWalletConnection variant="hero" />
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-          <div
-            className="text-center bg-gray-900 p-6 rounded-xl border-2 shadow-lg"
-            style={{ borderColor: "#ffee99" }}
-          >
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{ color: "#ffee99" }}
-            >
-              $50M+
-            </div>
-            <div className="text-gray-300">Total Funding Raised</div>
-          </div>
-          <div
-            className="text-center bg-gray-900 p-6 rounded-xl border-2 shadow-lg"
-            style={{ borderColor: "#ffee99" }}
-          >
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{ color: "#ffee99" }}
-            >
-              200+
-            </div>
-            <div className="text-gray-300">Startups Launched</div>
-          </div>
-          <div
-            className="text-center bg-gray-900 p-6 rounded-xl border-2 shadow-lg"
-            style={{ borderColor: "#ffee99" }}
-          >
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{ color: "#ffee99" }}
-            >
-              10K+
-            </div>
-            <div className="text-gray-300">Active Investors</div>
-          </div>
         </div>
       </div>
 
