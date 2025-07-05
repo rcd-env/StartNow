@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -26,13 +27,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
 
-  const login = (email: string, password: string) => {
+  const login = (email: string) => {
     // Simple mock authentication - in real app, this would call an API
     setIsLoggedIn(true);
     setUser({ name: 'John Doe', email });
   };
 
-  const signup = (name: string, email: string, password: string) => {
+  const signup = (name: string, email: string) => {
     // Simple mock signup - in real app, this would call an API
     setIsLoggedIn(true);
     setUser({ name, email });

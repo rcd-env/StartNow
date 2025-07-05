@@ -87,7 +87,7 @@ export const AuroraHero = () => {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <Link
-            to="/market-analysis"
+            to="/explore"
             className="text-black font-semibold py-4 px-8 rounded-xl transition-all duration-300 inline-flex items-center shadow-lg hover:opacity-80"
             style={{background: '#ffee99'}}
           >

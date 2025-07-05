@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import IdeaInput from './pages/IdeaInput';
+import IdeaInputMultiStep from './pages/IdeaInputMultiStep';
 import GenerateProposal from './pages/GenerateProposal';
 import Explore from './pages/Explore';
 import StartupDetail from './pages/StartupDetail';
@@ -19,7 +19,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/startup/:id" element={<StartupDetail />} />
-              <Route path="/idea-input" element={<IdeaInput />} />
+              <Route path="/idea-input" element={<IdeaInputMultiStep />} />
               <Route path="/generate-proposal" element={<GenerateProposal />} />
             </Routes>
           </Layout>

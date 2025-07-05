@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Lightbulb, Eye } from 'lucide-react';
+import { Send, Lightbulb, Eye, CheckCircle } from 'lucide-react';
 import FundingProposal from '../components/FundingProposal';
 import { useStartup } from '../contexts/StartupContext';
 
@@ -133,16 +133,7 @@ const IdeaInput: React.FC = () => {
     });
   };
 
-  const handleFundingAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Remove any non-numeric characters except commas and periods
-    const numericValue = value.replace(/[^0-9.,]/g, '');
 
-    setFormData({
-      ...formData,
-      fundingAmount: numericValue
-    });
-  };
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGettingInsights, setIsGettingInsights] = useState(false);
@@ -151,6 +142,32 @@ const IdeaInput: React.FC = () => {
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [touched, setTouched] = useState<{[key: string]: boolean}>({});
   const [showFundingProposal, setShowFundingProposal] = useState(false);
+
+  // Multi-step form state
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 5;
+
+  const stepTitles = [
+    'Company Basics',
+    'Problem & Solution',
+    'Business Model',
+    'Financial Information',
+    'Team & Final Details'
+  ];
+
+  const stepDescriptions = [
+    'Tell us about your company and industry',
+    'Describe the problem you\'re solving and your solution',
+    'Explain your business model and target market',
+    'Share your funding needs and financial projections',
+    'Provide team information and finalize your pitch'
+  ];
+
+  const goToStep = (step: number) => {
+    if (step >= 1 && step <= totalSteps) {
+      setCurrentStep(step);
+    }
+  };
 
   // Check if form is complete
   const isFormComplete = () => {
@@ -332,35 +349,85 @@ const IdeaInput: React.FC = () => {
         <div className="min-h-full flex items-center justify-center px-4">
           <div className="w-3/5">
             <div className="bg-gray-900 rounded-2xl p-6 shadow-lg w-full">
-              <div className="pb-4">
-              {/* Form Header */}
-             
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Company Name */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">
-                    Company Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    required
-                    className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none transition-colors ${
-                      touched.companyName && errors.companyName
-                        ? 'border-red-500 focus:border-red-400'
-                        : 'border-gray-600 focus:border-yellow-400'
-                    }`}
-                    placeholder="Enter your company name"
-                  />
-                  {touched.companyName && errors.companyName && (
-                    <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>
-                  )}
+              {/* Multi-Step Form Header */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h1 className="text-3xl font-bold text-white mb-2">Submit Your Pitch</h1>
+                    <p className="text-gray-400">Step {currentStep} of {totalSteps}: {stepTitles[currentStep - 1]}</p>
+                    <p className="text-gray-500 text-sm mt-1">{stepDescriptions[currentStep - 1]}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-yellow-400">{Math.round((currentStep / totalSteps) * 100)}%</div>
+                    <div className="text-gray-400 text-sm">Complete</div>
+                  </div>
                 </div>
+
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-6">
+                  <div
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${(currentStep / totalSteps) * 100}%`,
+                      background: '#ffee99'
+                    }}
+                  ></div>
+                </div>
+
+                {/* Step Indicators */}
+                <div className="flex justify-between mb-8">
+                  {stepTitles.map((title, index) => (
+                    <div
+                      key={index}
+                      className={`flex flex-col items-center cursor-pointer transition-all duration-200 ${
+                        index + 1 <= currentStep ? 'text-yellow-400' : 'text-gray-500'
+                      }`}
+                      onClick={() => goToStep(index + 1)}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mb-2 transition-all duration-200 ${
+                        index + 1 < currentStep
+                          ? 'bg-yellow-400 text-black'
+                          : index + 1 === currentStep
+                            ? 'bg-yellow-400 text-black'
+                            : 'bg-gray-700 text-gray-400'
+                      }`}>
+                        {index + 1 < currentStep ? <CheckCircle className="w-4 h-4" /> : index + 1}
+                      </div>
+                      <span className="text-xs text-center max-w-20">{title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            {/* Multi-Step Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Step 1: Company Basics */}
+              {currentStep === 1 && (
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Company Name */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">
+                        Company Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        required
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none transition-colors ${
+                          touched.companyName && errors.companyName
+                            ? 'border-red-500 focus:border-red-400'
+                            : 'border-gray-600 focus:border-yellow-400'
+                        }`}
+                        placeholder="Enter your company name"
+                      />
+                      {touched.companyName && errors.companyName && (
+                        <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>
+                      )}
+                    </div>
 
                 {/* Industry */}
                 <div>
@@ -719,8 +786,9 @@ const IdeaInput: React.FC = () => {
                   )}
                 </button>
               </div>
-            </form>
                 </div>
+              )}
+            </form>
               </div>
             </div>
           </div>

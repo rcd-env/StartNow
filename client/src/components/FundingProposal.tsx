@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Download, Share2, Eye, Check, Copy } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import jsPDF from 'jspdf';
-// @ts-ignore
+
 import html2canvas from 'html2canvas';
-// @ts-ignore
+// @ts-expect-error - dom-to-image types not available
 import domtoimage from 'dom-to-image';
 
 interface FormData {
@@ -24,12 +24,11 @@ interface FormData {
 
 interface FundingProposalProps {
   formData: FormData;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 const FundingProposal: React.FC<FundingProposalProps> = ({ formData, onBack }) => {
   const [isGenerating, setIsGenerating] = useState(true);
-  const [markdownContent, setMarkdownContent] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
@@ -67,7 +66,8 @@ const FundingProposal: React.FC<FundingProposalProps> = ({ formData, onBack }) =
       alert('Test PDF generated successfully!');
     } catch (error) {
       console.error('Test failed:', error);
-      alert('Test failed: ' + error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert('Test failed: ' + errorMessage);
     } finally {
       document.body.removeChild(testDiv);
     }
@@ -109,80 +109,8 @@ const FundingProposal: React.FC<FundingProposalProps> = ({ formData, onBack }) =
       // Simulate generation time
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      const industryName = formData.industry === 'other' ? formData.customIndustry : formData.industry;
-      
-      const markdown = `# ${formData.companyName} - Funding Proposal
+      // Simulate generation time for better UX
 
-## Executive Summary
-
-**Company:** ${formData.companyName}  
-**Industry:** ${industryName}  
-**Funding Request:** ${formData.fundingAmount}  
-**Business Model:** ${formData.businessModel}
-
-${formData.companyName} is seeking ${formData.fundingAmount} in funding to accelerate growth and market expansion in the ${industryName} sector.
-
-## Problem Statement
-
-${formData.problemStatement}
-
-## Our Solution
-
-${formData.solution}
-
-## Market Opportunity
-
-### Target Market
-${formData.targetMarket}
-
-### Market Segmentation
-${formData.marketSegmentation}
-
-## Business Model
-
-${formData.businessModel}
-
-## Team Structure
-
-${formData.teamStructure}
-
-## Financial Projections
-
-${formData.financialProjections}
-
-### Revenue Forecast
-Our financial projections show strong growth potential with projected revenues reaching $2M by Year 5.
-
-## Use of Funds
-
-${formData.useOfFunds}
-
-### Funding Allocation
-- **Product Development (40%):** Enhancing core features and technology
-- **Marketing & Sales (25%):** Customer acquisition and brand building  
-- **Operations (20%):** Infrastructure and operational scaling
-- **Team Expansion (15%):** Hiring key personnel
-
-## Investment Highlights
-
-- **Scalable Business Model:** Proven ability to scale operations efficiently
-- **Strong Market Demand:** Growing market with significant opportunity
-- **Experienced Team:** Skilled professionals with industry expertise
-- **Clear Growth Strategy:** Well-defined path to profitability and expansion
-
-## Next Steps
-
-1. **Due Diligence:** Comprehensive review of business metrics and projections
-2. **Term Sheet:** Negotiation of investment terms and conditions
-3. **Legal Documentation:** Finalization of investment agreements
-4. **Funding Deployment:** Strategic allocation of funds according to plan
-
----
-
-*This proposal was generated on ${new Date().toLocaleDateString()} for ${formData.companyName}.*
-`;
-
-      setMarkdownContent(markdown);
       setIsGenerating(false);
     };
 
@@ -215,14 +143,6 @@ ${formData.useOfFunds}
     try {
       const element = proposalRef.current;
       console.log('Element to capture:', element);
-      console.log('Element type:', element.constructor.name);
-      console.log('Element scroll dimensions:', element.scrollWidth, 'x', element.scrollHeight);
-      console.log('Element client dimensions:', element.clientWidth, 'x', element.clientHeight);
-
-      // Try html2canvas with very basic settings
-      console.log('Attempting to capture element with html2canvas...');
-      console.log('html2canvas function:', typeof html2canvas);
-      console.log('Element to capture:', element);
 
       // Make sure element is visible and has content
       if (element.offsetWidth === 0 || element.offsetHeight === 0) {
@@ -254,7 +174,8 @@ ${formData.useOfFunds}
           });
         } catch (altError) {
           console.error('Minimal html2canvas also failed:', altError);
-          throw new Error(`html2canvas completely failed: ${canvasError.message}`);
+          const canvasErrorMessage = canvasError instanceof Error ? canvasError.message : 'Unknown canvas error';
+          throw new Error(`html2canvas completely failed: ${canvasErrorMessage}`);
         }
       }
 
@@ -267,14 +188,14 @@ ${formData.useOfFunds}
         throw new Error('html2canvas returned null or undefined');
       }
 
-      if (typeof canvas.getDataURL !== 'function') {
+      if (typeof canvas.toDataURL !== 'function') {
         console.error('Canvas object:', canvas);
         console.error('Canvas properties:', Object.getOwnPropertyNames(canvas));
-        throw new Error(`Canvas object does not have getDataURL method. Type: ${typeof canvas}, Constructor: ${canvas.constructor.name}`);
+        throw new Error(`Canvas object does not have toDataURL method. Type: ${typeof canvas}, Constructor: ${canvas.constructor.name}`);
       }
 
       console.log('Getting image data from canvas...');
-      const imgData = canvas.getDataURL('image/png', 0.8);
+      const imgData = canvas.toDataURL('image/png', 0.8);
       console.log('Image data generated, length:', imgData.length);
 
       if (!imgData || imgData.length < 100) {
@@ -343,23 +264,24 @@ ${formData.useOfFunds}
       console.log('PDF saved successfully');
       alert('PDF generated successfully!');
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('html2canvas method failed:', error);
 
       // Try dom-to-image as alternative
       try {
         console.log('Trying dom-to-image method...');
         await generatePDFWithDomToImage();
-      } catch (domError: any) {
+      } catch (domError: unknown) {
         console.error('dom-to-image method failed:', domError);
 
         // Try text-based PDF as final fallback
         try {
           console.log('Trying text-based PDF generation...');
           await generateTextBasedPDF();
-        } catch (textError: any) {
+        } catch (textError: unknown) {
           console.error('Text-based PDF also failed:', textError);
-          alert(`Error generating PDF: ${error?.message || 'Unknown error'}. Please check the console for details.`);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          alert(`Error generating PDF: ${errorMessage}. Please check the console for details.`);
         }
       }
     } finally {
@@ -569,112 +491,7 @@ ${formData.useOfFunds}
     alert('PDF generated successfully (text version)!');
   };
 
-  const downloadPDFAlternative = async () => {
-    if (!proposalRef.current) return;
 
-    console.log('Using alternative PDF generation method...');
-
-    try {
-      const element = proposalRef.current;
-
-      // Expand element to show all content
-      const originalStyles = {
-        overflow: element.style.overflow,
-        height: element.style.height,
-        maxHeight: element.style.maxHeight
-      };
-
-      element.style.overflow = 'visible';
-      element.style.height = 'auto';
-      element.style.maxHeight = 'none';
-
-      // Wait for content to expand
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Capture with full dimensions
-      const canvas = await html2canvas(element, {
-        scale: 1,
-        backgroundColor: '#111827',
-        useCORS: true,
-        allowTaint: true,
-        logging: true,
-        width: element.scrollWidth,
-        height: element.scrollHeight,
-        scrollX: 0,
-        scrollY: 0
-      });
-
-      // Restore original styles
-      element.style.overflow = originalStyles.overflow;
-      element.style.height = originalStyles.height;
-      element.style.maxHeight = originalStyles.maxHeight;
-
-      console.log('Alternative canvas created:', canvas);
-      console.log('Canvas dimensions:', canvas.width, 'x', canvas.height);
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const margin = 10;
-
-      const imgWidth = pdfWidth - (margin * 2);
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      console.log('Alternative method - Image height:', imgHeight, 'PDF height:', pdfHeight);
-
-      if (imgHeight <= pdfHeight - (margin * 2)) {
-        // Single page
-        const imgData = canvas.toDataURL('image/png');
-        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
-      } else {
-        // Multiple pages
-        const pageHeight = pdfHeight - (margin * 2);
-        const totalPages = Math.ceil(imgHeight / pageHeight);
-
-        console.log(`Alternative method - Creating ${totalPages} pages`);
-
-        for (let page = 0; page < totalPages; page++) {
-          if (page > 0) {
-            pdf.addPage();
-          }
-
-          const sourceY = (page * pageHeight / imgHeight) * canvas.height;
-          const sourceHeight = Math.min(
-            (pageHeight / imgHeight) * canvas.height,
-            canvas.height - sourceY
-          );
-
-          // Create page canvas
-          const pageCanvas = document.createElement('canvas');
-          const pageCtx = pageCanvas.getContext('2d');
-          pageCanvas.width = canvas.width;
-          pageCanvas.height = sourceHeight;
-
-          if (pageCtx) {
-            pageCtx.drawImage(
-              canvas,
-              0, sourceY, canvas.width, sourceHeight,
-              0, 0, canvas.width, sourceHeight
-            );
-
-            const pageImgData = pageCanvas.toDataURL('image/png');
-            const actualPageHeight = (sourceHeight / canvas.height) * imgHeight;
-
-            pdf.addImage(pageImgData, 'PNG', margin, margin, imgWidth, actualPageHeight);
-          }
-        }
-      }
-
-      const fileName = `${formData.companyName.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '-').toLowerCase()}-funding-proposal.pdf`;
-      pdf.save(fileName);
-
-      console.log('Alternative PDF generation successful');
-
-    } catch (error) {
-      console.error('Alternative method error:', error);
-      throw error;
-    }
-  };
 
   const handleShare = async () => {
     const shareData = {
@@ -734,12 +551,14 @@ ${formData.useOfFunds}
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <button
-                onClick={onBack}
-                className="text-gray-300 hover:text-white transition-colors mr-4"
-              >
-                <ArrowLeft className="w-6 h-6" />
-              </button>
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="text-gray-300 hover:text-white transition-colors mr-4"
+                >
+                  <ArrowLeft className="w-6 h-6" />
+                </button>
+              )}
               <h1 className="text-3xl font-bold text-white">{formData.companyName} - Funding Proposal</h1>
             </div>
 
@@ -1033,7 +852,7 @@ ${formData.useOfFunds}
                       outerRadius={90}
                       innerRadius={30}
                       dataKey="value"
-                      label={({ name, value }) => `${value}%`}
+                      label={({ value }) => `${value}%`}
                     >
                       {marketSegmentData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
