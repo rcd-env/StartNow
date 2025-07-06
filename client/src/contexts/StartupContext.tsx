@@ -383,7 +383,9 @@ export const StartupProvider: React.FC<StartupProviderProps> = ({
       setError(null);
       const API_BASE_URL =
         import.meta.env.VITE_API_URL || "http://localhost:8080";
-      const response = await fetch(`${API_BASE_URL}/api/startups`);
+      const response = await fetch(
+        `https://startnow-9c9x.onrender.com/api/startups`
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch startups: ${response.statusText}`);
