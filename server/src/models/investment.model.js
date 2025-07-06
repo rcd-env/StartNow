@@ -19,13 +19,13 @@ const investmentSchema = new mongoose.Schema(
     },
     currency: {
       type: String,
-      default: 'USD',
-      enum: ['USD', 'EUR', 'GBP', 'BTC', 'ETH'],
+      default: "USD",
+      enum: ["USD", "EUR", "GBP", "BTC", "ETH"],
     },
     investmentType: {
       type: String,
       required: true,
-      enum: ['Equity', 'Convertible Note', 'SAFE', 'Debt', 'Token'],
+      enum: ["Equity", "Convertible Note", "SAFE", "Debt", "Token"],
     },
     equityPercentage: {
       type: Number,
@@ -35,8 +35,8 @@ const investmentSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['Pending', 'Approved', 'Completed', 'Rejected', 'Cancelled'],
-      default: 'Pending',
+      enum: ["Pending", "Approved", "Completed", "Rejected", "Cancelled"],
+      default: "Pending",
     },
     terms: {
       type: String,
@@ -53,17 +53,19 @@ const investmentSchema = new mongoose.Schema(
     transactionHash: {
       type: String, // For blockchain transactions
     },
-    documents: [{
-      name: String,
-      url: String,
-      uploadedAt: {
-        type: Date,
-        default: Date.now,
+    documents: [
+      {
+        name: String,
+        url: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now,
+        },
       },
-    }],
+    ],
   },
-  { 
-    timestamps: true 
+  {
+    timestamps: true,
   }
 );
 

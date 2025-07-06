@@ -18,7 +18,15 @@ const startupSchema = new mongoose.Schema(
     stage: {
       type: String,
       required: true,
-      enum: ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth', 'IPO'],
+      enum: [
+        "Pre-Seed",
+        "Seed",
+        "Series A",
+        "Series B",
+        "Series C",
+        "Growth",
+        "IPO",
+      ],
     },
     fundingGoal: {
       type: String,
@@ -26,7 +34,7 @@ const startupSchema = new mongoose.Schema(
     },
     fundingRaised: {
       type: String,
-      default: '$0',
+      default: "$0",
     },
     foundedDate: {
       type: String,
@@ -41,17 +49,21 @@ const startupSchema = new mongoose.Schema(
       required: true,
       min: 1,
     },
-    tags: [{
-      type: String,
-      trim: true,
-    }],
+    tags: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     logo: {
       type: String,
-      default: '🚀',
+      default: "🚀",
     },
-    images: [{
-      type: String,
-    }],
+    images: [
+      {
+        type: String,
+      },
+    ],
     founder: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -82,15 +94,15 @@ const startupSchema = new mongoose.Schema(
     financials: {
       revenue: {
         type: String,
-        default: '$0',
+        default: "$0",
       },
       growth: {
         type: String,
-        default: '0%',
+        default: "0%",
       },
       burn: {
         type: String,
-        default: '$0/month',
+        default: "$0/month",
       },
     },
     isActive: {
@@ -105,27 +117,82 @@ const startupSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    // Blockchain/Aptos related fields
+    blockchainPitchId: {
+      type: Number,
+      default: null,
+    },
+    escrowedAmount: {
+      type: Number,
+      default: 0,
+    },
+    releasedAmount: {
+      type: Number,
+      default: 0,
+    },
+    milestones: [
+      {
+        description: {
+          type: String,
+          required: true,
+        },
+        completed: {
+          type: Boolean,
+          default: false,
+        },
+        completedAt: {
+          type: Date,
+          default: null,
+        },
+        _id: false,
+      },
+    ],
+    investors: [
+      {
+        wallet: {
+          type: String,
+          required: true,
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
+        investedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        _id: false,
+      },
+    ],
+    contractAddress: {
+      type: String,
+      default: null,
+    },
+    isBlockchainEnabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  { 
+  {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
 // Virtual for funding percentage
-startupSchema.virtual('fundingPercentage').get(function() {
-  const goal = parseFloat(this.fundingGoal.replace(/[$,M]/g, ''));
-  const raised = parseFloat(this.fundingRaised.replace(/[$,M]/g, ''));
+startupSchema.virtual("fundingPercentage").get(function () {
+  const goal = parseFloat(this.fundingGoal.replace(/[$,M]/g, ""));
+  const raised = parseFloat(this.fundingRaised.replace(/[$,M]/g, ""));
   return goal > 0 ? Math.round((raised / goal) * 100) : 0;
 });
 
 // Index for search functionality
-startupSchema.index({ 
-  name: 'text', 
-  description: 'text', 
-  industry: 'text',
-  tags: 'text'
+startupSchema.index({
+  name: "text",
+  description: "text",
+  industry: "text",
+  tags: "text",
 });
 
 const Startup = mongoose.model("Startup", startupSchema);

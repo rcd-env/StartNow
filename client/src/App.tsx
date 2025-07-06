@@ -8,25 +8,41 @@ import StartupDetail from "./pages/StartupDetail";
 import AuthCallback from "./pages/AuthCallback";
 import { AuthProvider } from "./contexts/AuthContext";
 import { StartupProvider } from "./contexts/StartupContext";
+import { WalletProvider } from "./contexts/WalletContext";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+import { Network } from "@aptos-labs/ts-sdk";
 
 function App() {
   return (
-    <AuthProvider>
-      <StartupProvider>
-        <Router>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/startup/:id" element={<StartupDetail />} />
-              <Route path="/idea-input" element={<IdeaInputMultiStep />} />
-              <Route path="/generate-proposal" element={<GenerateProposal />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-            </Routes>
-          </Layout>
-        </Router>
-      </StartupProvider>
-    </AuthProvider>
+    <AptosWalletAdapterProvider
+      autoConnect={true}
+      dappConfig={{ network: Network.TESTNET }}
+      onError={(error) => {
+        console.log("Wallet adapter error:", error);
+      }}
+    >
+      <WalletProvider>
+        <AuthProvider>
+          <StartupProvider>
+            <Router>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/explore" element={<Explore />} />
+                  <Route path="/startup/:id" element={<StartupDetail />} />
+                  <Route path="/idea-input" element={<IdeaInputMultiStep />} />
+                  <Route
+                    path="/generate-proposal"
+                    element={<GenerateProposal />}
+                  />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                </Routes>
+              </Layout>
+            </Router>
+          </StartupProvider>
+        </AuthProvider>
+      </WalletProvider>
+    </AptosWalletAdapterProvider>
   );
 }
 

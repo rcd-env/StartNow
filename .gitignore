@@ -1,24 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
 # Environment variables
 .env
 .env.local
-.env.development
-.env.production
-
-# Dependencies
-node_modules/
-*/node_modules/
-
-# Build outputs
-dist/
-build/
-*/dist/
-*/build/
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Logs
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Runtime data
 pids
@@ -28,15 +26,22 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
-
-# nyc test coverage
-.nyc_output
+*.lcov
 
 # Dependency directories
 jspm_packages/
 
 # Optional npm cache directory
 .npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
 
 # Optional REPL history
 .node_repl_history
@@ -48,32 +53,70 @@ jspm_packages/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env.test
 
-# next.js build output
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
 .next
+out
 
-# Nuxt.js build output
+# Nuxt.js build / generate output
 .nuxt
+dist
 
-# vuepress build output
-.vuepress/dist
+# Gatsby files
+.cache/
+public
 
-# Serverless directories
-.serverless
+# Storybook build outputs
+.out
+.storybook-out
 
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Temporary folders
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # OS generated files
+Thumbs.db
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
+
+# Build outputs
+build/
+dist/
+
+# MongoDB
+*.mongodb
+
+# Database
+*.db
+*.sqlite
+
+# Contract build artifacts
+contract/build/
+contract/node_modules/
+
+# Additional build and temp files
+*.tsbuildinfo
+.cache/
+temp/
+tmp/
+contract/node_modules/

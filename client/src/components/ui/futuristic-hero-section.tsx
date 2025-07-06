@@ -4,7 +4,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { Link } from "react-router-dom";
-import { Upload, Search, Wallet } from "lucide-react";
+import { Upload, Search } from "lucide-react";
 import SimpleWalletConnection from "../SimpleWalletConnection";
 
 // Custom Golden Stars Component
@@ -66,7 +66,7 @@ export const AuroraHero = () => {
       <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl mx-auto text-center">
         <span className="mb-1.5 inline-block rounded-full bg-gray-600/50 px-3 py-1.5 text-sm text-white shadow-lg shadow-blue-500/50 border border-blue-400/30 animate-pulse">
           <span className="relative">
-            Available Now
+            Available Now!
             <span className="absolute inset-0 blur-sm bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-pulse"></span>
           </span>
         </span>

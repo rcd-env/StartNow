@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Wallet, ChevronDown, ExternalLink } from "lucide-react";
+import { useCustomWallet } from "../contexts/WalletContext";
 
 interface WalletConnectionProps {
   variant?: "default" | "hero" | "navbar" | "mobile";
@@ -22,8 +23,12 @@ declare global {
 const SimpleWalletConnection: React.FC<WalletConnectionProps> = ({
   variant = "default",
 }) => {
-  const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState<string | null>(null);
+  const {
+    connected,
+    address,
+    connectWallet: contextConnectWallet,
+    disconnectWallet: contextDisconnectWallet,
+  } = useCustomWallet();
   const [showModal, setShowModal] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,19 +75,10 @@ const SimpleWalletConnection: React.FC<WalletConnectionProps> = ({
   const connectWallet = async () => {
     try {
       setLoading(true);
-      const wallet = window.aptos || window.petra;
-
-      if (!wallet) {
-        setShowModal(true);
-        return;
-      }
-
-      const response = await wallet.connect();
-      setConnected(true);
-      setAddress(response.address);
-      console.log("Connected to wallet:", response.address);
+      await contextConnectWallet();
     } catch (error) {
       console.error("Failed to connect wallet:", error);
+      setShowModal(true);
     } finally {
       setLoading(false);
     }
@@ -90,14 +86,8 @@ const SimpleWalletConnection: React.FC<WalletConnectionProps> = ({
 
   const disconnectWallet = async () => {
     try {
-      const wallet = window.aptos || window.petra;
-      if (wallet) {
-        await wallet.disconnect();
-      }
-      setConnected(false);
-      setAddress(null);
+      await contextDisconnectWallet();
       setShowAccountDropdown(false);
-      console.log("Disconnected from wallet");
     } catch (error) {
       console.error("Failed to disconnect wallet:", error);
     }
