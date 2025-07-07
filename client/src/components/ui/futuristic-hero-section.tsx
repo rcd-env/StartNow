@@ -64,12 +64,6 @@ export const AuroraHero = () => {
   return (
     <motion.section className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gray-950 px-4 py-24 text-gray-200">
       <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl mx-auto text-center">
-        <span className="mb-1.5 inline-block rounded-full bg-gray-600/50 px-3 py-1.5 text-sm text-white shadow-lg shadow-blue-500/50 border border-blue-400/30 animate-pulse">
-          <span className="relative">
-            Available Now!
-            <span className="absolute inset-0 blur-sm bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-pulse"></span>
-          </span>
-        </span>
         <h1 className="max-w-3xl bg-gradient-to-br from-slate-400 to-slate-600 bg-clip-text text-center text-3xl font-medium leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
           Launch Your Startup Into the Future
         </h1>
